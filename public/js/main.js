@@ -561,59 +561,68 @@
             });
         }
 
-        // Hero Video Sequencer
-        const vid1 = document.getElementById('hero-vid-1');
-        const vid2 = document.getElementById('hero-vid-2');
-        if (vid1 && vid2) {
-            vid1.play().catch(()=>{});
-            
+        // Hero Video Sequencer (fired after preloader dismisses)
+        function startHeroVideos() {
+            const vid1 = document.getElementById('hero-vid-1');
+            const vid2 = document.getElementById('hero-vid-2');
+            if (!vid1 || !vid2) return;
+
+            vid1.play().catch(() => {});
+
             vid1.addEventListener('ended', () => {
-                vid2.play().catch(()=>{});
+                vid2.play().catch(() => {});
                 vid2.classList.remove('opacity-0');
                 vid2.classList.add('opacity-40');
-                
                 vid1.classList.remove('opacity-40');
                 vid1.classList.add('opacity-0');
             });
         }
 
         // Cinematic Preloader Logic
-        window.addEventListener('load', () => {
+        // Uses DOMContentLoaded timing — does NOT wait for videos/images to load.
+        // A hard 4s max cap ensures it never stays stuck on slow connections.
+        function dismissPreloader() {
             const preloader = document.getElementById('preloader');
             const loaderBrand = document.getElementById('loader-brand');
             const loaderBar = document.getElementById('loader-progress-bar');
             const loaderText = document.getElementById('loader-text');
             const body = document.getElementById('body');
+            if (!preloader || preloader.dataset.dismissed) return;
+            preloader.dataset.dismissed = '1';
 
-            // Prevent video autoplay until loaded
-            const vid1 = document.getElementById('hero-vid-1');
-            if(vid1) vid1.pause();
+            // Step 1 — reveal brand + progress bar
+            loaderBrand.classList.remove('translate-y-full');
+            loaderBar.style.width = '100%';
+            loaderText.classList.remove('opacity-0');
 
-            // 1. Reveal "MAESTRO." and start progress
-            setTimeout(() => {
-                loaderBrand.classList.remove('translate-y-full');
-                loaderBar.style.width = '100%';
-                loaderText.classList.remove('opacity-0');
-            }, 100);
-
-            // 2. Hide "MAESTRO." and slide up preloader
+            // Step 2 — after 2.2s: slide brand out
             setTimeout(() => {
                 loaderBrand.classList.add('-translate-y-full');
                 loaderBar.classList.add('opacity-0');
                 loaderText.classList.add('opacity-0');
-                
+
+                // Step 3 — 0.6s later: sweep preloader up
                 setTimeout(() => {
                     preloader.style.transform = 'translateY(-100%)';
-                    
-                    // 3. Unlock scroll and start hero
+
+                    // Step 4 — unlock scroll + fire videos
                     setTimeout(() => {
                         body.classList.remove('overflow-hidden');
-                        if(vid1) vid1.play().catch(()=>{});
-                        // Allow preloader to be hidden from DOM to save resources
-                        setTimeout(() => preloader.style.display = 'none', 1500);
+                        startHeroVideos();
+                        setTimeout(() => { preloader.style.display = 'none'; }, 1500);
                     }, 800);
-                    
-                }, 600); // Wait for brand to slide out
-            }, 2500); // Duration of the fake "loading" phase
-        });
+                }, 600);
+            }, 2200);
+        }
+
+        // Trigger as soon as DOM is ready (no video/image wait)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', dismissPreloader);
+        } else {
+            // DOM already parsed (script deferred / async)
+            dismissPreloader();
+        }
+
+        // Hard cap: if something goes wrong, force dismiss after 4s
+        setTimeout(dismissPreloader, 4000);
 
