@@ -750,10 +750,23 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 border-b border-white/10 pb-12 md:pb-20">
                 
-                <!-- Google Maps Embed -->
-                <div class="lg:col-span-5 rounded-2xl overflow-hidden shadow-2xl border border-white/10 h-64 md:h-80 lg:h-full min-h-[300px] fade-up relative group">
-                    <div class="absolute inset-0 bg-accent/20 mix-blend-overlay pointer-events-none group-hover:opacity-0 transition-opacity duration-700"></div>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d105073.443670007!2d-58.43329845000001!3d-34.615662449999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcca3b4ef90cbd%3A0xa0b3812e88e88be5!2sBuenos%20Aires%2C%20CABA!5e0!3m2!1ses-419!2sar!4v1700000000000!5m2!1ses-419!2sar" width="100%" height="100%" style="border:0; filter: invert(90%) hue-rotate(180deg) grayscale(80%) contrast(120%);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="w-full h-full object-cover"></iframe>
+                <!-- Mapa Estético (Sin API) -->
+                <div class="lg:col-span-5 rounded-2xl overflow-hidden shadow-2xl border border-white/10 h-64 md:h-80 lg:h-full min-h-[300px] fade-up relative group bg-dark">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center">
+                        <div class="w-16 h-16 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center">
+                            <i data-lucide="map-pin" class="w-8 h-8 text-accent"></i>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold text-lg md:text-xl">Av. Industrial 4500</p>
+                            <p class="text-cement text-sm md:text-base">Parque Logístico, Buenos Aires</p>
+                        </div>
+                        <a href="https://maps.google.com/?q=Buenos+Aires+Argentina" target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex items-center gap-2 bg-accent text-white px-5 py-2.5 rounded-lg font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-dark transition-colors">
+                            <i data-lucide="navigation" class="w-4 h-4"></i>
+                            Ver en Google Maps
+                        </a>
+                    </div>
+                    <!-- Grid pattern decoration -->
+                    <div class="absolute inset-0 opacity-5" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 40px 40px;"></div>
                 </div>
 
                 <!-- Contact & Info -->
